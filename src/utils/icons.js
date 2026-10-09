@@ -1,0 +1,1 @@
+export const ICON_FAMILY = "icons-round";
