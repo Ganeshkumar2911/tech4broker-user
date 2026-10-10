@@ -1,14 +1,9 @@
 <template>
   <div
-    class="relative w-full h-full bg-auth-side-bg text-white flex flex-col justify-center items-center overflow-hidden select-none px-4 sm:px-6 lg:px-8 border-l border-white/5"
+    class="relative w-full h-full bg-black text-white flex flex-col justify-center items-center overflow-hidden select-none px-4 sm:px-6 lg:px-8 border-l border-white/5"
     @mouseenter="pauseTimer"
     @mouseleave="resumeTimer"
   >
-    <!-- Background Ambient Glow for Depth -->
-    <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[90px] pointer-events-none"
-    />
-
     <!-- Main Slide Content Container with Smooth Vue Transition -->
     <transition name="fade-slide" mode="out-in">
       <div

@@ -195,8 +195,104 @@ export const misc2Handlers = [
     })
   }),
 
+  // Loyalty Points History
+  http.get(/\/api\/.*\/loyalty\/points$/, ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page')) || 1;
+    const perPage = parseInt(url.searchParams.get('per_page')) || 10;
+    const totalItems = 30;
+
+    const items = Array.from({ length: totalItems }).map((_, i) => ({
+      id: faker.string.uuid(),
+      created_at: faker.date.recent().toISOString(),
+      entry_type: faker.helpers.arrayElement(['TRADE', 'REWARD', 'ADJUSTMENT']),
+      metadata: {
+        symbol: faker.helpers.arrayElement(['EURUSD', 'GBPUSD', 'XAUUSD']),
+        lots: parseFloat(faker.finance.amount(0.1, 5, 2))
+      },
+      deal_id: faker.number.int({ min: 1000000, max: 9999999 }).toString(),
+      lot_id: faker.number.int({ min: 1000000, max: 9999999 }).toString(),
+      delta: parseFloat(faker.finance.amount(-100, 500, 2)),
+      balance_after: parseFloat(faker.finance.amount(1000, 10000, 2)),
+      lot_points_remaining: parseFloat(faker.finance.amount(0, 100, 2)),
+      expires_at: faker.date.future().toISOString()
+    }));
+
+    return HttpResponse.json({
+      status: 'success',
+      data: items.slice((page - 1) * perPage, page * perPage),
+      pagination: {
+        page,
+        per_page: perPage,
+        total_items: totalItems,
+        total_pages: Math.ceil(totalItems / perPage)
+      }
+    });
+  }),
+
+  // Loyalty Store Products
+  http.get(/\/api\/.*\/loyalty\/store\/products$/, ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page')) || 1;
+    const perPage = parseInt(url.searchParams.get('per_page')) || 10;
+    const totalItems = 20;
+
+    const items = Array.from({ length: totalItems }).map((_, i) => ({
+      id: i + 1,
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      product_type: faker.helpers.arrayElement(['cash', 'voucher', 'merchandise']),
+      points_cost: faker.number.int({ min: 100, max: 5000 }),
+      image_url: faker.image.url(),
+      stock: faker.number.int({ min: 0, max: 100 }),
+      is_active: true
+    }));
+
+    return HttpResponse.json({
+      status: 'success',
+      data: items.slice((page - 1) * perPage, page * perPage),
+      pagination: {
+        page,
+        per_page: perPage,
+        total_items: totalItems,
+        total_pages: Math.ceil(totalItems / perPage)
+      }
+    });
+  }),
+
+  // Loyalty Store Redemptions
+  http.get(/\/api\/.*\/loyalty\/store\/redemptions$/, ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page')) || 1;
+    const perPage = parseInt(url.searchParams.get('per_page')) || 10;
+    const totalItems = 15;
+
+    const items = Array.from({ length: totalItems }).map((_, i) => ({
+      id: i + 1,
+      order_id: 'ORD-' + faker.number.int({ min: 1000, max: 9999 }),
+      product: {
+        name: faker.commerce.productName(),
+        product_type: faker.helpers.arrayElement(['cash', 'voucher', 'merchandise']),
+      },
+      points_used: faker.number.int({ min: 100, max: 5000 }),
+      status: faker.helpers.arrayElement(['pending', 'completed', 'shipped', 'cancelled']),
+      created_at: faker.date.recent().toISOString()
+    }));
+
+    return HttpResponse.json({
+      status: 'success',
+      data: items.slice((page - 1) * perPage, page * perPage),
+      pagination: {
+        page,
+        per_page: perPage,
+        total_items: totalItems,
+        total_pages: Math.ceil(totalItems / perPage)
+      }
+    });
+  }),
+
   // Note: catching all /loyalty/* as a fallback just in case
-  http.get('/api/loyalty/*', ({ request }) => {
+  http.get(/\/api\/.*\/loyalty\/.*/, ({ request }) => {
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page')) || 1
     const perPage = parseInt(url.searchParams.get('per_page')) || 10

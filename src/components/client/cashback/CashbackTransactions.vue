@@ -48,7 +48,7 @@ const onPageChange = (page) => {
       </template>
 
       <template #cell-trading_account_id="{ row }">
-        <span class="text-xs font-medium text-primary-text">{{ row.trading_account || '-' }}</span>
+        <span class="text-xs font-medium text-primary-text">{{ row.trading_account.account_number || '-' }}</span>
       </template>
 
       <template #cell-symbol="{ row }">

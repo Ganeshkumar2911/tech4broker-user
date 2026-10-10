@@ -555,11 +555,6 @@ const formatMoney = (value) => {
 
 // add edit account
 const handleAddAccount = () => {
-  if (!isKycApproved.value) {
-    snackbar.show("Please verify your KYC before adding an account.", "error");
-    return;
-  }
-
   onAddAccount();
 };
 const onAddAccount = () => {

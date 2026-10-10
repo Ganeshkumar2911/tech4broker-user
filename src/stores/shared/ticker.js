@@ -64,6 +64,35 @@ export const useTickerStore = defineStore("tickers", () => {
   const startWebSocket = () => {
     if (wsStatus) return;
 
+    // ----- MOCK LIVE DATA GENERATOR -----
+    // Start interval to generate random market ticks for tracked symbols
+    if (typeof window !== 'undefined' && !window.mockTickerInterval) {
+      const basePrices = {
+        "XAUUSD": 2340.50, "EURUSD": 1.0850, "GBPUSD": 1.2650, 
+        "USDJPY": 150.30, "AUDUSD": 0.6550, "AUDJPY": 98.40, 
+        "USDCAD": 1.3500, "EURGBP": 0.8550, "EURCHF": 0.9800, 
+        "USDCHF": 0.9000,
+      };
+      
+      window.mockTickerInterval = setInterval(() => {
+        tickerList.value.forEach(symbol => {
+          let base = lastPrices.value[symbol]?.bid || basePrices[symbol] || 100;
+          const fluctuation = (Math.random() - 0.5) * 0.001; 
+          const newBid = base * (1 + fluctuation);
+          const newAsk = newBid * 1.0001;
+          
+          updateLastPrice({
+            symbol,
+            bid: newBid,
+            ask: newAsk,
+            open: basePrices[symbol] || 100, 
+            time: Date.now()
+          });
+        });
+      }, 1500);
+    }
+    // ------------------------------------
+
     const notificationsStore = useNotificationsStore();
 
     ticker = new MatrixTicker({
@@ -73,9 +102,7 @@ export const useTickerStore = defineStore("tickers", () => {
 
     ticker.on("connect", () => {
       isConnected.value = true;
-
       console.log("WebSocket Connected");
-
       if (tickerList.value.length > 0) {
         subscribe(profileStore.user?.user_id, tickerList.value);
       }

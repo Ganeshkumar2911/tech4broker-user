@@ -9,6 +9,53 @@ function paginate(items, page, perPage) {
 }
 
 export const cashbackHandlers = [
+  // PROGRAM
+  http.get(/\/api\/.*\/cashback\/program$/, () => {
+    return HttpResponse.json({
+      status: 'success',
+      data: {
+        id: 1,
+        name: 'VIP Cashback Rewards',
+        description: 'Earn generous cashback rebates on every trade. Rebates are calculated per lot traded and credited directly to your cashback wallet, ready for immediate withdrawal or transfer.',
+        currency: 'USD',
+        min_redemption_amount: '50.00',
+        eligibility_rules: {
+          require_live: true,
+          require_kyc: true,
+          exclude_copy_accounts: true,
+          exclude_account_categories: ['A-Book', 'Bonus'],
+          trading_types: ['self-trading', 'pamm-investor']
+        },
+        plans: [
+          {
+            id: 101,
+            code: 'win',
+            name: 'Winning Trades',
+            status: 'Active',
+            qualify_on: 'winning',
+            rate_per_lot: '3.50'
+          },
+          {
+            id: 102,
+            code: 'loss',
+            name: 'Losing Trades',
+            status: 'Active',
+            qualify_on: 'losing',
+            rate_per_lot: '5.00'
+          },
+          {
+            id: 103,
+            code: 'all',
+            name: 'All Volume',
+            status: 'Active',
+            qualify_on: 'all',
+            rate_per_lot: '2.00'
+          }
+        ]
+      }
+    });
+  }),
+
   // ENROLLMENTS
   http.get('/api/:role' + (urls?.cashback?.enrollments || '/__UNMATCHED__'), ({ request }) => {
     const url = new URL(request.url)

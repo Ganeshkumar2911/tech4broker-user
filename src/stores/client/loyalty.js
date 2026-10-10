@@ -483,12 +483,17 @@ export const useLoyaltyStore = defineStore("loyalty", () => {
     }
 
     const successHandler = (res) => {
-      points.value = res?.data?.items || [];
-      const total = res?.data?.total || 0;
-      const pages = res?.data?.pages || 1;
+      const isDataArray = Array.isArray(res?.data);
+      points.value = isDataArray ? res.data : (res?.data?.items || res?.data?.data || []);
+      
+      const total = isDataArray ? (res?.pagination?.total_items || res.data.length) : (res?.data?.total || res?.data?.total_items || res?.pagination?.total_items || 0);
+      const pages = isDataArray ? (res?.pagination?.total_pages || 1) : (res?.data?.pages || res?.data?.total_pages || res?.pagination?.total_pages || 1);
+      const resPage = isDataArray ? (res?.pagination?.page || page) : (res?.data?.page || res?.pagination?.page || page);
+      const resPerPage = isDataArray ? (res?.pagination?.per_page || perPage) : (res?.data?.per_page || res?.pagination?.per_page || perPage);
+
       pointsPagination.value = {
-        page: res?.data?.page || page,
-        per_page: res?.data?.per_page || perPage,
+        page: resPage,
+        per_page: resPerPage,
         total: total,
         pages: pages,
         total_pages: pages,

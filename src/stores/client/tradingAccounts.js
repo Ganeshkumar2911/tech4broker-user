@@ -103,18 +103,20 @@ export const useTradingAccountsStore = defineStore("tradingAccounts", () => {
     }
 
     const successHandler = (res) => {
-      const response = res?.data || {};
-
-      data.value = Array.isArray(response.accounts)
-        ? response.accounts
-        : [];
-
-      if (response.pagination) {
-        Object.assign(pagination, response.pagination);
+      if (Array.isArray(res?.data)) {
+        data.value = res.data;
+      } else if (res?.data?.accounts && Array.isArray(res.data.accounts)) {
+        data.value = res.data.accounts;
+      } else {
+        data.value = [];
       }
 
-      if (response.summary) {
-        summary.value = response.summary;
+      if (res?.pagination) {
+        Object.assign(pagination, res.pagination);
+      }
+
+      if (res?.summary) {
+        summary.value = res.summary;
       }
 
       loading.value = false;

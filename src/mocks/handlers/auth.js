@@ -93,5 +93,55 @@ export const authHandlers = [
       success: true,
       message: 'Profile updated successfully'
     })
+  }),
+
+  // 5. Mock Landing Images for Auth Side Panel
+  http.get('/api/:role' + (urls?.auth?.landingImages || '/landing-images'), ({ request, params }) => {
+    const isFm = request.url.includes('group=fm') || params.role === 'fm'
+
+    let slides = []
+    
+    if (isFm) {
+      slides = [
+        {
+          id: 1,
+          title: "Manage Multiple Accounts",
+          description: "Seamlessly manage investor funds with our **Advanced PAMM/MAM** trading tools.",
+          url: "/promo_trading.jpg"
+        },
+        {
+          id: 2,
+          title: "Earn Performance Fees",
+          description: "Get paid automatically for your successful trades. Transparent and secure **daily settlements**.",
+          url: "/promo_bonus.jpg"
+        }
+      ]
+    } else {
+      slides = [
+        {
+          id: 1,
+          title: "100% Deposit Bonus",
+          description: "Double your trading power instantly! Claim up to **$5,000 Free Credit** on your first deposit.",
+          url: "/promo_bonus.jpg"
+        },
+        {
+          id: 2,
+          title: "Advanced Trading Tools",
+          description: "Experience lightning-fast execution and **0 Pip Spreads** on major FX pairs.",
+          url: "/promo_trading.jpg"
+        },
+        {
+          id: 3,
+          title: "Bank-Grade Security",
+          description: "Your funds are protected with **Tier-1 Bank** segregation and enterprise-level encryption.",
+          url: "/promo_security.jpg"
+        }
+      ]
+    }
+
+    return HttpResponse.json({
+      success: true,
+      data: slides
+    })
   })
 ]

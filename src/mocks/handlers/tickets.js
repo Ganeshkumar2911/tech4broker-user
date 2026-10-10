@@ -3,6 +3,43 @@ import urls from '../../api/urls'
 import { faker } from '@faker-js/faker'
 
 export const ticketsHandlers = [
+  // LIST TICKETS
+  http.get('/api/:role' + (urls?.tickets?.list || '/__UNMATCHED__'), ({ request }) => {
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page')) || 1
+    const perPage = parseInt(url.searchParams.get('per_page')) || 10
+    const totalItems = 30
+    
+    const allTickets = Array.from({ length: totalItems }).map((_, i) => ({
+      id: i + 1,
+      ticket_number: `TKT-${faker.number.int({ min: 1000, max: 9999 })}`,
+      priority: faker.helpers.arrayElement(['high', 'medium', 'low']),
+      status: faker.helpers.arrayElement(['open', 'in_progress', 'resolved', 'closed']),
+      subject: faker.lorem.sentence(),
+      created_by_name: faker.person.fullName(),
+      created_by_email: faker.internet.email(),
+      created_by_role: 'Client',
+      created_at: faker.date.recent({ days: 30 }).toISOString(),
+    }))
+
+    return HttpResponse.json({
+      status: 'success',
+      data: allTickets.slice((page - 1) * perPage, page * perPage),
+      pagination: {
+        page,
+        per_page: perPage,
+        total_items: totalItems,
+        total_pages: Math.ceil(totalItems / perPage)
+      },
+      counts: {
+        new_tickets: 5,
+        open_tickets: 12,
+        closed_tickets: 18,
+        total_tickets: totalItems
+      }
+    })
+  }),
+
   // GET TICKET DETAIL
   http.get('/api/:role' + (urls?.tickets?.detail || '/__UNMATCHED__') + '/:id', ({ params }) => {
     return HttpResponse.json({

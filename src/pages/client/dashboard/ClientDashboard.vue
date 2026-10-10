@@ -444,11 +444,6 @@ const isKycApproved = computed(() => {
 const openDialog = ref(false);
 const editData = ref(null);
 const handleAddAccount = () => {
-  if (!isKycApproved.value) {
-    snackbar.show("Please verify your KYC before adding an account.", "error");
-    return;
-  }
-
   onAddAccount();
 };
 const onAddAccount = () => {

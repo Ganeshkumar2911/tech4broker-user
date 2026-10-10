@@ -137,7 +137,12 @@
 
           <!-- Net Profit Highlight -->
           <div class="pb-3 border-b border-primary-border/80">
-            <span class="text-xs text-secondary-text">Net Profit</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs text-secondary-text">Net Profit</span>
+              <Tooltip text="Net profit earned from copying this strategy after performance fee deductions" position="top" wrap>
+                <Info :size="11" class="text-secondary-text/70 hover:text-primary-text transition-colors cursor-pointer shrink-0" />
+              </Tooltip>
+            </div>
             <div class="flex items-baseline justify-between gap-2 mt-1">
               <p
                 class="font-bold text-xl font-mono tabular-nums leading-tight"
@@ -164,24 +169,44 @@
             </div>
 
             <div class="flex items-center justify-between text-[13px]">
-              <span class="text-secondary-text">Lot Settings</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-secondary-text">Lot Settings</span>
+                <Tooltip text="Copied lot sizing mode (Fixed lot or Multiplier ratio)" position="top" wrap>
+                  <Info :size="11" class="text-secondary-text/70 hover:text-primary-text transition-colors cursor-pointer shrink-0" />
+                </Tooltip>
+              </div>
               <span class="font-bold text-primary-text capitalize">
                 {{ row.lot_value != null ? row.lot_value : 1 }}{{ row.lot_type === 'multiplier' ? 'x' : ' Lots' }} ({{ row.lot_type ?? 'Fixed' }})
               </span>
             </div>
 
             <div class="flex items-center justify-between text-[13px]">
-              <span class="text-secondary-text">Total Trades</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-secondary-text">Total Trades</span>
+                <Tooltip text="Number of copied trades executed for this strategy" position="top" wrap>
+                  <Info :size="11" class="text-secondary-text/70 hover:text-primary-text transition-colors cursor-pointer shrink-0" />
+                </Tooltip>
+              </div>
               <span class="font-bold text-primary-text font-mono">{{ row.total_trades ?? 0 }}</span>
             </div>
 
             <div class="flex items-center justify-between text-[13px]">
-              <span class="text-secondary-text">Total Fees</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-secondary-text">Total Fees</span>
+                <Tooltip text="Cumulative performance and management fees paid to the manager" position="top" wrap>
+                  <Info :size="11" class="text-secondary-text/70 hover:text-primary-text transition-colors cursor-pointer shrink-0" />
+                </Tooltip>
+              </div>
               <span class="font-bold text-primary-text font-mono">{{ formatCurrencyValue(row.total_fees, getRowCurrency(row)) }}</span>
             </div>
 
             <div class="flex items-center justify-between text-[13px]">
-              <span class="text-secondary-text">Performance Fee</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-secondary-text">Performance Fee</span>
+                <Tooltip text="Profit share percentage charged by the fund manager on profitable trades" position="top" wrap>
+                  <Info :size="11" class="text-secondary-text/70 hover:text-primary-text transition-colors cursor-pointer shrink-0" />
+                </Tooltip>
+              </div>
               <span class="font-bold text-primary-text font-mono">{{ row.fund_manager?.performance_fee ?? row.offer?.performance_fee ?? 0 }}%</span>
             </div>
 
@@ -220,7 +245,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { History, CalendarDays, BookOpen, Users, TrendingUp } from 'lucide-vue-next'
+import { History, CalendarDays, BookOpen, Users, TrendingUp, Info } from 'lucide-vue-next'
 import { useFollowedFundManagersHistoryStore } from '@/stores/fm/followedFundManagersHistory'
 import BaseSearch from '@/components/base/BaseSearch.vue'
 import EmptyState from '@/components/base/EmptyState.vue'
