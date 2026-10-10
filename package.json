@@ -41,8 +41,15 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
     "@vitejs/plugin-vue": "^6.0.5",
+    "msw": "^2.15.0",
     "vite": "^8.0.4",
     "vite-plugin-vue-devtools": "^8.1.1"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
