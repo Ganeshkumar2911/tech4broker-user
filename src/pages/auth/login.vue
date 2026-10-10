@@ -162,7 +162,8 @@ const handleLogin = () => {
 
   const failureHandler = (err) => {
     loading.value = false;
-    snackbar.show(err?.error || "Something went wrong.", "error");
+    const msg = err?.message || err?.error || (typeof err === 'string' ? err : 'Something went wrong.');
+    snackbar.show(msg, "error");
   };
 
   apiRequest(urls.KEYS.POST, urls.auth.login, {

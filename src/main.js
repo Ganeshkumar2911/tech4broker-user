@@ -26,7 +26,6 @@ initGlobalNumberGuard()
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(router)
 app.component('Tooltip', Tooltip)
 app.component('Pagination', Pagination)
 app.component('BaseSelect', BaseSelect)
@@ -65,4 +64,14 @@ document.addEventListener('gestureend', (event) => {
   event.preventDefault()
 })
 
-app.mount('#app')
+async function enableMocking() {
+  const { worker } = await import('./mocks/browser')
+  return worker.start({
+    onUnhandledRequest: 'bypass',
+  })
+}
+
+enableMocking().then(() => {
+  app.use(router)
+  app.mount('#app')
+})
