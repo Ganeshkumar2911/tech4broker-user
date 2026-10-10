@@ -9,6 +9,10 @@ const getBaseURL = (overrideRole = null) => {
   const customBaseUrl = localStorage.getItem("custom_base_url");
   const role = overrideRole || localStorage.getItem("role") || "client";
 
+  if (import.meta.env.DEV) {
+    return `/api/${role}/`;
+  }
+
   if (customBaseUrl && customBaseUrl.trim()) {
     let cleanUrl = customBaseUrl.trim().replace(/\/+$/, "");
     cleanUrl = cleanUrl.replace(/\/(client|fm|ib|admin)$/, "");
